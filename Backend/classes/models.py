@@ -14,7 +14,6 @@ class ClassStudentData(models.Model):
 
 class theClasses(models.Model):
     className = models.CharField(max_length=50,default="None")
-    classSize = models.CharField(max_length=50, default="None")
     canjoinclass = models.CharField(max_length=50, default="open")
 
     objects = models.Manager()

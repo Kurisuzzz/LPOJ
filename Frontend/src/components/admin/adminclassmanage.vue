@@ -1,81 +1,66 @@
 <template>
   <el-row>
-    <el-row>
-      <el-form>
-        <el-col>
-          <el-form-item label="班级名称">
-            <el-input v-model="form.className"
-                      style="width:500px"></el-input>
-          </el-form-item>
-        </el-col>
+    <el-form>
+      <el-form-item label="班级名称">
+        <el-input v-model="form.className"
+                  style="width:500px">
+          <el-button slot="append"
+                     icon="el-icon-search"
+                     @keyup.native.enter="searchtitle"
+                     @click="searchtitle"></el-button>
+        </el-input>
+        <el-button round
+                   @click="AddClass">增加班级</el-button>
+      </el-form-item>
 
-        <el-col>
-          <el-form-item label="班级总人数">
-            <el-input v-model="form.classSize"
-                      style="width:500px"></el-input>
-          </el-form-item>
-        </el-col>
+    </el-form>
 
-        <el-col>
-          <el-button round
-                     @click="AddClass">增加班级</el-button>
-        </el-col>
-      </el-form>
+    <el-table :data="tableData2"
+              style="width: 100%">
+      <el-table-column prop="className"
+                       label="班级"
+                       sortable
+                       width="300">
+      </el-table-column>
 
-    </el-row>
-    <el-row>
-      <el-input placeholder="输入班级名称以搜索..."
-                v-model="searchclass"
-                @keyup.native.enter="searchtitle"
-                style="float:right;width:300px;">
-        <el-button slot="append"
-                   icon="el-icon-search"
-                   @click="searchtitle"></el-button>
-      </el-input>
+      <el-table-column prop="classCount"
+                       label="人数"
+                       sortable
+                       width="300">
+      </el-table-column>
 
-      <el-table :data="tableData"
-                style="width: 100%">
-        <el-table-column prop="className"
-                         label="班级"
-                         width="300">
-        </el-table-column>
+      <el-table-column prop="Operate"
+                       label="操作"
+                       width="600">
+        　　　　<template slot-scope="scope">
+          　　　　　　<el-button type="primary"
+                     size="small"
+                     @click="CheckDetail(scope.row)">查看详情</el-button>
+          　　　　　　
+          　　　　　　<el-button type="danger"
+                     size="small"
+                     @click="DeleteClass(scope.row)">删除</el-button>
 
-        <el-table-column prop="classSize"
-                         label="人数"
-                         width="300">
-        </el-table-column>
+          <el-button type="success"
+                     size="small"
+                     @click="openClass(scope.row)">开放加入</el-button>
 
-        <el-table-column prop="Operate"
-                         label="操作"
-                         width="600">
-          　　　　<template slot-scope="scope">
-            　　　　　　<el-button type="primary"
-                       size="small"
-                       @click="CheckDetail(scope.row)">查看详情</el-button>
-            　　　　　　
-            　　　　　　<el-button type="danger"
-                       size="small"
-                       @click="DeleteClass(scope.row)">删除</el-button>
+          <el-button type="warning"
+                     size="small"
+                     @click="closeClass(scope.row)">关闭加入</el-button>
 
-            <el-button type="success"
-                       size="small"
-                       @click="openClass(scope.row)">开放加入</el-button>
+        </template>
+      </el-table-column>
 
-            <el-button type="warning"
-                       size="small"
-                       @click="closeClass(scope.row)">关闭加入</el-button>
+      <el-table-column prop="canjoinclass"
+                       label="开放状态"
+                       sortable
+                       width="150">
+      </el-table-column>
 
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="canjoinclass"
-                         label="开放状态"
-                         width="300">
-        </el-table-column>
-
-      </el-table>
-    </el-row>
+    </el-table>
   </el-row>
+
 </template>
 
 <script>
@@ -89,11 +74,11 @@ export default {
       tableData: [],
       tableData2: [],
       cName: [],
+      cPermission: [],
       classCount: "",
       cPeoplecount: [],
       form: {
         className: "",
-        classSize: "",
       },
       deleteId: "",
     };
@@ -103,7 +88,7 @@ export default {
       this.$axios
         .get(
           "/classes/?search=" +
-          this.searchclass
+          this.form.className
         )
         .then(response => {
           this.tableData = response.data;
@@ -129,12 +114,7 @@ export default {
 
       var tmpform = row;
       tmpform = deepCopy(tmpform);
-      var tmpsize = tmpform.classSize.split("/");
-      tmpsize = String(tmpsize[1]);
-      tmpform.classSize = tmpsize;
       tmpform.canjoinclass = "open";
-      console.log(tmpform);
-
       this.$axios.get("/classes/?className=" + row.className)
         .then(res => {
           var putId = res.data[0].id;
@@ -171,11 +151,7 @@ export default {
 
       var tmpform = row;
       tmpform = deepCopy(tmpform);
-      var tmpsize = tmpform.classSize.split("/");
-      tmpsize = String(tmpsize[1]);
-      tmpform.classSize = tmpsize;
       tmpform.canjoinclass = "close";
-      console.log(tmpform);
 
       this.$axios.get("/classes/?className=" + row.className)
         .then(res => {
@@ -195,7 +171,6 @@ export default {
 
     },
     AddClass () {
-      console.log(this.form);
       this.$axios.post("/ADDclasses/", this.form)
         .then(
           response => {
@@ -248,12 +223,12 @@ export default {
 
   },
   created () {
-
     this.$axios.get("/classes/")
       .then(response => {
         this.classCount = response.data.length;
-        this.tableData = response.data;
+        console.log(this.classCount);
         for (var i = 0; i < response.data.length; i++) {
+          this.cPermission.push(response.data[i].canjoinclass);
           this.cName.push(response.data[i].className);
         };
         (async () => {
@@ -265,14 +240,20 @@ export default {
               this.cPeoplecount.push(JSON.stringify(data.length));
             }
           }
-          console.log(this.cPeoplecount);
           for (var ii = 0; ii < this.classCount; ii++) {
-            this.tableData[ii].classSize = this.cPeoplecount[ii] + "/" + this.tableData[ii].classSize;
+            this.tableData[ii] = {};
+            this.$set(this.tableData[ii], "className", this.cName[ii]);
+            this.$set(this.tableData[ii], "classCount", this.cPeoplecount[ii]);
+            this.$set(this.tableData[ii], "canjoinclass", this.cPermission[ii]);
           }
+          this.tableData2 = this.tableData;
         })();
-      })
+
+
+      });
   },
   mounted () {
+
   },
 }
 </script>

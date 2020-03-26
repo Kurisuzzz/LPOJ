@@ -1,5 +1,6 @@
 <template>
-  <el-tabs type="border-card" @tab-click="tabClick">
+  <el-tabs type="border-card"
+           @tab-click="tabClick">
     <el-tab-pane label="Overview">
       <span slot="label">
         <b>
@@ -8,7 +9,9 @@
       </span>
       <contestoverview ref="Overview"></contestoverview>
     </el-tab-pane>
-    <el-tab-pane label="Problems" :disabled="!haveauth" :lazy="true">
+    <el-tab-pane label="Problems"
+                 :disabled="!haveauth"
+                 :lazy="true">
       <span slot="label">
         <b>
           <i class="el-icon-menu"></i> Problems
@@ -16,7 +19,7 @@
       </span>
       <contestproblem ref="Problems"></contestproblem>
     </el-tab-pane>
-    <el-tab-pane label="ChoiceProblems" >
+    <el-tab-pane label="ChoiceProblems">
       <span slot="label">
         <b>
           <i class="el-icon-menu"></i> ChoiceProblems
@@ -41,18 +44,24 @@
       <contestrank ref="Rankings"></contestrank>
     </el-tab-pane>
 
-    <el-tab-pane label="Announcements" :disabled="!haveauth">
+    <el-tab-pane label="Announcements"
+                 :disabled="!haveauth">
       <span slot="label">
         <b>
-          <el-badge :value="anvalue" :hidden="anvalue==0" style="margin-top:5px"></el-badge>
-          <i class="el-icon-bell" v-if="anvalue==0"></i>
+          <el-badge :value="anvalue"
+                    :hidden="anvalue==0"
+                    style="margin-top:5px"></el-badge>
+          <i class="el-icon-bell"
+             v-if="anvalue==0"></i>
           Announcements
         </b>
       </span>
       <contestannounce ref="Announcements"></contestannounce>
     </el-tab-pane>
 
-    <el-tab-pane label="Comments" :disabled="!haveauth" :lazy="true">
+    <el-tab-pane label="Comments"
+                 :disabled="!haveauth"
+                 :lazy="true">
       <span slot="label">
         <b>
           <i class="el-icon-info"></i> Comments
@@ -60,7 +69,9 @@
       </span>
       <contestcomment ref="Comments"></contestcomment>
     </el-tab-pane>
-    <el-tab-pane label="Tutorial" :disabled="!haveauth" :lazy="true">
+    <el-tab-pane label="Tutorial"
+                 :disabled="!haveauth"
+                 :lazy="true">
       <span slot="label">
         <b>
           <i class="el-icon-notebook-1"></i> Tutorial
@@ -93,7 +104,7 @@ export default {
     contesttutorial,
     contestchoiceproblem
   },
-  data() {
+  data () {
     return {
       contestid: this.$route.params.contestID,
       haveauth: false,
@@ -101,7 +112,7 @@ export default {
       anlist: []
     };
   },
-  created() {
+  created () {
     this.contestid = this.$route.params.contestID;
 
     this.$axios
@@ -129,7 +140,7 @@ export default {
             return;
           }
 
-          if(sessionStorage.type==2||sessionStorage.type==3){
+          if (sessionStorage.type == 2 || sessionStorage.type == 3) {
             this.haveauth = 1;
             return;
           }
@@ -139,9 +150,9 @@ export default {
             this.$axios
               .get(
                 "/contestregister/?user=" +
-                  username +
-                  "&contestid=" +
-                  this.contestid
+                username +
+                "&contestid=" +
+                this.contestid
               )
               .then(response => {
                 if (response.data.length > 0) {
@@ -159,15 +170,15 @@ export default {
         return;
       });
   },
-  mounted() {
+  mounted () {
     this.$store.state.antimer = setInterval(this.getan, 300000); //改为5分钟刷一次，减少刷新率
     this.getan()
   },
-  destroyed() {
+  destroyed () {
     clearInterval(this.$store.state.antimer);
   },
   methods: {
-    getan() {
+    getan () {
       this.$axios
         .get("/contestannouncement/?contestid=" + this.$route.params.contestID)
         .then(response => {
@@ -180,18 +191,18 @@ export default {
             }
             if (flag == false) {
               this.anlist.push(response.data[i]["announcement"]);
-                this.$notify.warning({
-                  dangerouslyUseHTMLString: true,
-                  title: "提示",
-                  message: response.data[i]["announcement"],
-                  duration: 70000000
-                });
+              this.$notify.warning({
+                dangerouslyUseHTMLString: true,
+                title: "提示",
+                message: response.data[i]["announcement"],
+                duration: 70000000
+              });
             }
           }
         });
     },
 
-    tabClick(tab) {
+    tabClick (tab) {
       //console.log(tab);
       // if (tab.label == "Problems")
       //   this.$refs.Problems.getproblem(this.$route.params.contestID);

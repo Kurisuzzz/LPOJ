@@ -2,43 +2,6 @@
 <template>
   <el-tabs v-model="activeName"
            type="border-card">
-    <el-tab-pane label="加入班级"
-                 name="JoinClass">
-      <template>
-        <el-input placeholder="输入班级名称以搜索..."
-                  v-model="searchclass"
-                  @keyup.native.enter="searchtitle"
-                  style="float:right;width:300px;">
-          <el-button slot="append"
-                     icon="el-icon-search"
-                     @click="searchtitle"></el-button>
-        </el-input>
-        <el-table :data="tableData"
-                  style="width: 100%">
-          <el-table-column prop="className"
-                           label="班级"
-                           width="400"
-                           align="center">
-          </el-table-column>
-          <el-table-column prop="classSize"
-                           label="人数"
-                           width="200"
-                           align="center">
-          </el-table-column>
-          <el-table-column label="操作"
-                           align="center"
-                           min-width="200">
-            　　　　<template slot-scope="scope">
-              　　　　　　<el-button type="primary"
-                         size="small"
-                         round
-                         @click="JoinClick(scope.row)">加入</el-button>
-              　　　　</template>
-            　　</el-table-column>
-        </el-table>
-      </template>
-
-    </el-tab-pane>
     <el-tab-pane label="我的班级"
                  name="MyClass">
 
@@ -79,6 +42,44 @@
       </template>
 
     </el-tab-pane>
+    <el-tab-pane label="加入班级"
+                 name="JoinClass">
+      <template>
+        <el-input placeholder="输入班级名称以搜索..."
+                  v-model="searchclass"
+                  @keyup.native.enter="searchtitle"
+                  style="float:right;width:300px;">
+          <el-button slot="append"
+                     icon="el-icon-search"
+                     @click="searchtitle"></el-button>
+        </el-input>
+        <el-table :data="tableData"
+                  style="width: 100%">
+          <el-table-column prop="className"
+                           label="班级"
+                           width="400"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="classCount"
+                           label="人数"
+                           width="200"
+                           align="center">
+          </el-table-column>
+          <el-table-column label="操作"
+                           align="center"
+                           min-width="200">
+            　　　　<template slot-scope="scope">
+              　　　　　　<el-button type="primary"
+                         size="small"
+                         round
+                         @click="JoinClick(scope.row)">加入</el-button>
+              　　　　</template>
+            　　</el-table-column>
+        </el-table>
+      </template>
+
+    </el-tab-pane>
+
   </el-tabs>
 </template>
 
@@ -87,7 +88,7 @@ export default {
   name: "classes",
   data () {
     return {
-      activeName:"JoinClass",
+      activeName: "MyClass",
       searchclass: "",
       cName: [],
       classCount: "",
@@ -95,6 +96,7 @@ export default {
 
       tableData: [],
       tableData2: [],
+      tableData3:[],
       form: {
         className: "",
         studentUserName: "",
@@ -213,7 +215,7 @@ export default {
     this.$axios.get("/classes/")
       .then(response => {
         this.classCount = response.data.length;
-        this.tableData = response.data;
+        console.log(this.classCount);
         for (var i = 0; i < response.data.length; i++) {
           this.cName.push(response.data[i].className);
         };
@@ -227,10 +229,13 @@ export default {
             }
           }
           for (var ii = 0; ii < this.classCount; ii++) {
-            this.tableData[ii].classSize = this.cPeoplecount[ii] + "/" + this.tableData[ii].classSize;
+            this.tableData3[ii] = {};
+            this.$set(this.tableData3[ii], "className", this.cName[ii]);
+            this.$set(this.tableData3[ii], "classCount", this.cPeoplecount[ii]);
           }
+          this.tableData = this.tableData3;
         })();
-      })
+      });
     this.$axios.get("/classStudent/?studentUserName=" + sessionStorage.username)
       .then(response => {
         this.tableData2 = response.data;
