@@ -21,4 +21,5 @@ urlpatterns = [
     url('', include(routers.urls)),
     url(r'^currenttime', views.CurrentTimeView.as_view()),
     url(r'^contestfilterboard', views.ContestBoardFilterAPIView.as_view()),
+    url(r'^conteststuchoiceanswer', views.ContestChoiceProblemAPIView.as_view()),
 ]

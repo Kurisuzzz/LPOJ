@@ -10,6 +10,7 @@ from rest_framework.throttling import ScopedRateThrottle
 from rest_framework import viewsets, mixins, filters
 from .permission import ManagerOnly, UserRatingOnly, UserRatingOnly2, UserOnly
 from .models import ContestBoardTotal, ContestComingInfo,ContestTutorial, ContestAnnouncement, ContestRatingChange, ContestBoard, ContestComment, ContestInfo, ContestProblem, ContestRegister, StudentChoiceAnswer, ContestChoiceProblem
+from problem.models import ChoiceProblem
 from .serializers import ContestBoardTotalSerializer, ContestComingInfoSerializer,ContestTutorialSerializer, ContestRatingChangeSerializer, ContestAnnouncementSerializer, ContestBoardSerializer, ContestCommentSerializer, ContestInfoSerializer, ContestProblemSerializer, ContestRegisterSerializer, StudentChoiceAnswerSerializer, ContestChoiceProblemSerializer
 import datetime
 
@@ -64,7 +65,7 @@ class ContestInfoView(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
     permission_classes = (ManagerOnly,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    filter_fields = ("begintime", "level", "type","title","classes")
+    filter_fields = ("id","begintime", "level", "type","title","classes")
     search_fields = ('title',)
     throttle_scope = "post"
     throttle_classes = [ScopedRateThrottle, ]
@@ -194,3 +195,34 @@ class ContestChoiceProblemView(viewsets.ModelViewSet):
     permission_classes = (ManagerOnly,)
     filter_fields = ('ContestId','ChoiceProblemId', "rank")
     throttle_scope = "post"
+
+class ContestChoiceProblemAPIView(APIView):
+    throttle_scope = "post"
+    throttle_classes = [ScopedRateThrottle, ]
+
+    def post(self, request, format=None):
+        serializer_class = StudentChoiceAnswerSerializer
+        contestid = request.data["contestid"]
+        stuanswer = request.data['answer']
+        proScore = list(ContestInfo.objects.filter(id=contestid).values())
+        proScore = proScore[0]['ChoiceProblemScore']
+        problemid = list(ContestChoiceProblem.objects.filter(ContestId=contestid).values())
+        problemid = sorted(problemid,key = lambda e:e.__getitem__('rank'))
+        answer = ""
+        fenshu = 0
+        for a in problemid:
+            proid=a['ChoiceProblemId']
+            chopro = ChoiceProblem.objects.filter(ChoiceProblemId=proid)
+            for b in chopro:
+                answer += b.answer
+        for i in range(0,len(answer)):
+            if(stuanswer[i]==answer[i]):
+                fenshu = int(fenshu)+int(proScore)
+        request.data['score']=fenshu
+        savedata = StudentChoiceAnswerSerializer(data=request.data)
+        if savedata.is_valid():
+            savedata.save()
+            return Response(HTTP_200_OK)
+        return Response('提交失败', HTTP_200_OK)
+
+

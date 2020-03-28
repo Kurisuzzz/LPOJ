@@ -33,11 +33,11 @@ class ChoiceProblem(models.Model):
     choiceB = models.TextField()
     choiceC = models.TextField()
     choiceD = models.TextField()
-
+    answer = models.CharField(max_length=2,null=False)
     objects = models.Manager()
 
     def __str__(self):
-        return self.des
+        return self.ChoiceProblemId
 
 
 class ProblemData(models.Model):

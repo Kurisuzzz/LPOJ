@@ -17,6 +17,7 @@ class ContestInfo(models.Model):
     clonefrom = models.IntegerField(default=-1)
     classes = models.CharField(max_length=500, default="All")
     iprange = models.CharField(max_length=2000, default="iprange")
+    ChoiceProblemScore = models.CharField(max_length=50, default="0")
 
     objects = models.Manager()
 
@@ -159,7 +160,7 @@ class ContestChoiceProblem(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return self.contestid
+        return self.ChoiceProblemId
 
 class StudentChoiceAnswer(models.Model):
     username = models.CharField(max_length=100,default="")
@@ -172,5 +173,5 @@ class StudentChoiceAnswer(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return self.user
+        return self.username
 
