@@ -3,26 +3,6 @@
            v-show="canshow">
     <el-row>
       <el-row>
-        <el-input placeholder="请输入一道题的分值（一题多少分）"
-                  v-model="singalscore"
-                  clearable>
-        </el-input>
-
-        <el-col>
-          <el-input placeholder="请输入正确答案(区分大小写)"
-                    v-model="standardanswer"
-                    clearable>
-          </el-input>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-button type="success"
-                   :disabled="!isadmin"
-                   @click="Score">评阅</el-button>
-
-      </el-row>
-
-      <el-row>
         <el-table :data="tableData"
                   id="out-table"
                   style="width: 100%">
@@ -52,9 +32,6 @@
 
       <el-row>
       </el-row>
-      <el-button type="success"
-                 :disabled="!isadmin"
-                 @click="SubmitScore">提交评阅</el-button>
       <el-button type="primary"
                  :disabled="!isadmin"
                  @click="exportExcel">导出表格</el-button>
@@ -114,58 +91,6 @@ export default {
         if (typeof console !== "undefined") console.log(e, wbout);
       }
       return wbout;
-    },
-    SubmitScore () {
-      this.$confirm(
-        "确定提交评阅分数吗？",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }
-      ).then(() => {
-
-        for (var i = 0; i < this.studentcount; i++) {
-          var Username = this.tableData[i].username;
-          var Contestid = this.contestid;
-
-          this.scoreform.username = this.tableData[i].username;
-          this.scoreform.realname = this.tableData[i].realname;
-          this.scoreform.number = this.tableData[i].number;
-          this.scoreform.contestid = this.contestid;
-          this.scoreform.answer = this.tableData[i].answer;
-          this.scoreform.score = this.tableData[i].score;
-
-          this.$axios.get("/conteststudentchoiceanswer/?username=" + Username + "&contestid=" + Contestid)
-            .then(response => {
-              var SubId = response.data[0].id;
-              this.$axios.put("/conteststudentchoiceanswer/" + SubId + "/", this.scoreform)
-                .then(response2 => {
-
-                  this.scoreform.reset();
-                  console.log(this.scoreform);
-                }).catch(error => {
-                  this.$message.error(
-                    "服务器错误！" + JSON.stringify(error.response.data)
-                  );
-                });
-            })
-        }
-        this.$message.success("提交评阅成功！");
-      });
-    },
-    Score () {
-      var Answer = this.standardanswer;
-      for (var i = 0; i < this.studentcount; i++) {
-        var stuAnswer = this.tableData[i].answer;
-        var Score = Number(0);
-
-        for (var ii = 0; ii < Answer.length; ii++) {
-          if (stuAnswer[ii] === Answer[ii])
-            Score += Number(this.singalscore);
-        }
-        this.tableData[i].score = Number(Score);
-      }
     },
   },
   created () {

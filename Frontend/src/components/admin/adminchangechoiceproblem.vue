@@ -12,31 +12,31 @@
     <el-table :data="tabledata">
       <el-table-column property="ChoiceProblemId"
                        label="ID"
-                       width="70"></el-table-column>
+                       width="50"></el-table-column>
 
       <el-table-column property="des"
                        label="题面"
-                       width="400"></el-table-column>
+                       width="250"></el-table-column>
 
       <el-table-column property="choiceA"
                        label="选项A"
-                       width="300"></el-table-column>
+                       width="250"></el-table-column>
 
       <el-table-column property="choiceB"
                        label="选项B"
-                       width="300"></el-table-column>
+                       width="250"></el-table-column>
 
       <el-table-column property="choiceC"
                        label="选项C"
-                       width="300"></el-table-column>
+                       width="250"></el-table-column>
 
       <el-table-column property="choiceD"
                        label="选项D"
-                       width="300"></el-table-column>
-
-      <el-table-column
-                       label="操作"
-                      >
+                       width="250"></el-table-column>
+      <el-table-column property="answer"
+                       label="答案"
+                       width="50"></el-table-column>
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="EditChoiceProblem(scope.row)"
                      type="primary"
@@ -92,6 +92,12 @@
         <el-form-item label="选项D：">
           <el-input type="textarea"
                     v-model="choiceproblemform.choiceD"
+                    autosize
+                    style="width:800px;"></el-input>
+        </el-form-item>
+        <el-form-item label="答案">
+          <el-input type="textarea"
+                    v-model="choiceproblemform.answer"
                     autosize
                     style="width:800px;"></el-input>
         </el-form-item>

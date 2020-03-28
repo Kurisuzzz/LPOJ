@@ -43,7 +43,12 @@
                 autosize
                 style="width:800px;"></el-input>
     </el-form-item>
-
+    <el-form-item label="答案">
+      <el-input type="textarea"
+                v-model="choiceproblemform.answer"
+                autosize
+                style="width:800px;"></el-input>
+    </el-form-item>
     <el-button type="success"
                @click="AddChoiceProblemSubmit"
                style="float:left;">添加题目</el-button>
@@ -61,6 +66,7 @@ export default {
         choiceB: "",
         choiceC: "",
         choiceD: "",
+        answer: "",
 
       }
     }

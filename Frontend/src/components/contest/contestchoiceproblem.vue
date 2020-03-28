@@ -83,25 +83,16 @@ export default {
       }
     },
     Submit () {
-      console.log(this.radio);
-
       if (this.$store.state.contestisend == true) {
         this.$message.error("比赛已结束");
       }
       else {
-        this.form.answer = "";
-        for (var i = 0; i < this.ProblenCount; i++) {
-          if (this.allRadio[i]) {
-            this.form.answer += this.allRadio[i];
-          }
-          else {
-            this.form.answer += "X";
-          }
-        }
-        this.$axios.get("/user/?username=" + this.form.username)
-          .then(response2 => {
-            this.form.realname = response2.data[0].realname;
-            this.form.number = response2.data[0].number;
+        this.$confirm("确定提交答案吗？只能提交一次！",
+          {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }).then(() => {
             this.$axios.get(
               "/conteststudentchoiceanswer/?username=" +
               this.form.username +
@@ -110,52 +101,43 @@ export default {
             )
               .then(
                 response => {
-                  if (response.data.length > 0) {
-                    var updateId = response.data[0].id;
-                    this.$axios.put("/conteststudentchoiceanswer/" + updateId + "/", this.form)
-                      .then(
-                        response3 => {
-                          this.$message({
-                            message: "提交成功！",
-                            type: "success"
+                 if (response.data[0]) {
+                   this.$message.error("你已经提交过答案");
+                 }
+                  else {                    8
+                    this.form.answer = "";
+                    for (var i = 0; i < this.ProblenCount; i++) {
+                      if (this.allRadio[i]) {
+                        this.form.answer += this.allRadio[i];
+                      }
+                      else {
+                        this.form.answer += "X";
+                      }
+                    }
+                    this.$axios.get("/user/?username=" + this.form.username)
+                      .then(response2 => {
+                        this.form.realname = response2.data[0].realname;
+                        this.form.number = response2.data[0].number;
+                        this.$axios.post("/conteststuchoiceanswer/", this.form)
+                          .then(
+                            response3 => {
+                              this.myanswer = this.form.answer ;
+                              this.$message({
+                                message: "提交成功！",
+                                type: "success"
+                              });
+                            }
+                          ).catch(error => {
+                            this.$message.error(
+                              "提交失败！请再提交一次" + "(" + JSON.stringify(error.response.data) + ")"
+                            );
                           });
-                        }
-                      ).catch(error => {
-                        this.$message.error(
-                          "提交失败！请再提交一次" + "(" + JSON.stringify(error.response.data) + ")"
-                        );
-                      });
-                  }
-                  else {
-                    this.$axios.post("/conteststudentchoiceanswer/", this.form)
-                      .then(
-                        response3 => {
-                          this.$message({
-                            message: "提交成功！",
-                            type: "success"
-                          });
-                        }
-                      ).catch(error => {
-                        this.$message.error(
-                          "提交失败！请再提交一次" + "(" + JSON.stringify(error.response.data) + ")"
-                        );
-                      });
-                  }
-                  this.$axios.get(
-                    "/conteststudentchoiceanswer/?username=" +
-                    this.form.username +
-                    "&contestid=" +
-                    this.form.contestid
-                  )
-                    .then(
-                      response => {
-                        this.myanswer = response.data[0].answer;
-                      })
+                      }
+                      )
+                 }
                 })
-          }
-          )
+          })
       };
-
     },
     getIputValue (index) {
       var ChooseAnswer = this.radio[index].split(".");
@@ -183,6 +165,7 @@ export default {
           this.ChoiceProblemIds.push(response.data[i].ChoiceProblemId);
         }
         this.ChoiceProblemIds.sort(this.compare("rank"));
+        console.log(this.ChoiceProblemIds);
         this.ChoiceProblemDatas = [];
         (async () => {
           const dataArray = await Promise.all(
@@ -201,9 +184,7 @@ export default {
                 ));
             }
           }
-        })();
-      })
-      .then(() => {
+        })().then(() => {
         this.$axios.get(
           "/conteststudentchoiceanswer/?username=" +
           this.form.username +
@@ -238,7 +219,9 @@ export default {
               }
 
             });
+      });
       })
+
 
 
   }
