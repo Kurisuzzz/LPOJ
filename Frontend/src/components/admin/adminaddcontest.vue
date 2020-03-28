@@ -172,7 +172,10 @@
                        :value="0"></el-option>
           </el-select>
         </el-form-item>
-        
+        <el-form-item label="选择题分值（每道）">
+          <el-input v-model="addcontestform.ChoiceProblemScore"
+                    style="width:200px;"></el-input>
+        </el-form-item>
 
         <el-row>
           <el-col>
@@ -317,7 +320,8 @@ export default {
         type: "ACM",
         auth: 0,
         iprange: "None",
-        classes: "All"
+        classes: "All",
+        ChoiceProblemScore:"0",
       }
     };
   },

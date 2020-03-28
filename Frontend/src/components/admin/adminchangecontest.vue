@@ -352,6 +352,7 @@ export default {
       tmpaddchoiceproblemid: "",
       canadd: false,
       canadd2: false,
+      contestClass: "",
 
       searchtitle: "",
       searchpro: "",
@@ -601,6 +602,24 @@ export default {
                   );
                 });
 
+
+            }).then(() => {
+              this.$axios.get(`/contestinfo/?id=${num}`)
+                .then(response4 => {
+                  this.contestClass = response4.data[0].classes;
+                }).then(() => {
+                  this.$axios.get(`/classStudent/?className=${this.contestClass}`)
+                    .then(response3 => {
+                      var str = "";
+                      for (var i = 0; i < response3.data.length; i++) {
+                        str = str + response3.data[i].studentUserName + "(" + response3.data[i].studentRealName + ")" + ",";
+                      }
+                      if (str != "") str = str.substring(0, str.length - 1);
+
+                      this.contestregister = this.contestregister + str;
+
+                    })
+                })
 
             })
             .catch(error => {
