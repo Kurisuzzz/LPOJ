@@ -218,12 +218,11 @@
           <div slot="tip"
                class="el-upload__tip">只能上传zip/jpg文件【注意是小写字母后缀】,压缩包内的不要有文件夹，输入输出文件后缀为.in和.out.添加一个casedes.txt文件（utf-8编码）可以对每一个样例进行说明，每行一个说明，中间不要有多余的空行，对应的case用|隔开，如： case1|这是case1的说明</div>
         </el-upload>
-        <h5><a style="text-decoration: none;color:#67C23A;" target="_blank" href="https://docs.lpoj.cn/doc/judger.html#special-judge">点我看判题机文档</a></h5>
-
+        <h5><a style="text-decoration: none;color:#67C23A;"
+             target="_blank"
+             href="https://docs.lpoj.cn/doc/judger.html#special-judge">点我看判题机文档</a></h5>
 
         <el-form-item>
-          <el-input v-model="serviceaddress"
-                    placeholder="下载数据需要填写服务端地址，如：http://localhost:8000 ,注意最后不要有斜杠（临时功能）"></el-input>
           <el-button type="success"
                      @click="downFun">下载已上传数据</el-button>
 
@@ -287,10 +286,23 @@ export default {
   },
   methods: {
     downFun () {
-
-      var fileurl = this.serviceaddress + "/downloadfile/?name=" + this.changeproblid;
-      console.log(fileurl);
-      window.open(fileurl);
+      this.$axios.get(`/downloadfile/?name=${this.changeproblid}`, { responseType: 'blob' })
+        .then(response => {
+          this.downloadFile(response.data);
+        });
+    },
+    downloadFile (data) {
+      // 文件导出
+      if (!data) {
+        return
+      }
+      let url = window.URL.createObjectURL(new Blob([data]), { type: 'application/zip' });
+      let link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', `${this.changeproblid}.zip`);
+      document.body.appendChild(link);
+      link.click()
     },
     problemclick (row) {
       window.open("/problemdetail?problemID=" + row.problem);
@@ -403,18 +415,18 @@ export default {
     handleError (response, file, fileList) {
       this.$message.error("数据上传失败！" + response);
     },
-    async handleSuccess(response, file, fileList) {
+    async handleSuccess (response, file, fileList) {
 
-      try{
+      try {
         var response = await this.$axios.put(
           "/problem/" + this.problemform.problem + "/",
           this.problemform
         );
       }
-      catch(error){
+      catch (error) {
         console.log(error)
       }
-      
+
 
       this.problemdataform.problem = this.problemform.problem;
       this.problemdataform.title = this.problemform.title;
@@ -424,20 +436,20 @@ export default {
       this.problemdataform.auth = this.problemform.auth;
       var tag = this.problemdataform.tag.split("|");
       for (var i = 0; i < tag.length; i++) {
-        try{
+        try {
           await this.$axios.post("/problemtag/", {
             tagname: tag[i],
             count: 1
           });
-        }catch(error){
+        } catch (error) {
           console.log(error)
         }
       }
 
-      try{
+      try {
         var response2 = await this.$axios.put(
-        "/problemdata/" + this.problemform.problem + "/",
-        this.problemdataform
+          "/problemdata/" + this.problemform.problem + "/",
+          this.problemdataform
         );
 
         this.$message({
@@ -448,7 +460,7 @@ export default {
         this.loading = false;
         this.dialogTableVisible = false;
       }
-      catch(error){
+      catch (error) {
         console.log(error)
       }
 

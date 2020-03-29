@@ -12,6 +12,6 @@ routers.register('choiceproblem', views.ChoiceProblemView)
 urlpatterns = [
     url('', include(routers.urls)),
     url(r'^uploadfile', views.UploadFileAPIView.as_view()),
-    url(r'^downloadfile/',views.filedown,name='download'),
+    url(r'^downloadfile',views.DownloadFileAPIView.as_view(),name='download'),
     url(r'^showpic/',views.showpic,name='show_picture'),
 ]

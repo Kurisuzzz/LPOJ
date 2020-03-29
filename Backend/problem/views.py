@@ -91,17 +91,17 @@ class UploadFileAPIView(APIView):
 
         return Response('upload success', HTTP_200_OK)
 
-
-def filedown(request):
-    type = request.session.get('type', 1)
-    if type == 1:
-        return Response("Admin Only", status=HTTP_403_FORBIDDEN)
-    name = request.GET.get('name')
-    file = open('./ProblemData/'+name+'.zip','rb')
-    response = FileResponse(file)
-    response['Content-Type']='application/msword'
-    response['Content-Disposition']='attachment;filename='+name+'.zip'
-    return response
+class DownloadFileAPIView(APIView):
+    def get(self, request, format=None):
+        type = request.session.get('type', 1)
+        if type == 1:
+            return Response("Admin Only", status=HTTP_403_FORBIDDEN)
+        name = request.GET.get('name')
+        file = open('./ProblemData/'+name+'.zip','rb')
+        response = FileResponse(file)
+        response['Content-Type']='application/msword'
+        response['Content-Disposition']='attachment;filename='+name+'.zip'
+        return response
 
 def showpic(request):
     name = request.GET.get('ProblemId')
