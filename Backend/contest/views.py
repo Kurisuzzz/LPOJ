@@ -197,32 +197,37 @@ class ContestChoiceProblemView(viewsets.ModelViewSet):
     throttle_scope = "post"
 
 class ContestChoiceProblemAPIView(APIView):
-    throttle_scope = "post"
+    throttle_scope = "post"#限流
     throttle_classes = [ScopedRateThrottle, ]
 
     def post(self, request, format=None):
         serializer_class = StudentChoiceAnswerSerializer
         contestid = request.data["contestid"]
         stuanswer = request.data['answer']
+        #从数据库中获取比赛信息
         proScore = list(ContestInfo.objects.filter(id=contestid).values())
         proScore = proScore[0]['ChoiceProblemScore']
+        #从数据库中获取比赛中的选择题信息
         problemid = list(ContestChoiceProblem.objects.filter(ContestId=contestid).values())
         problemid = sorted(problemid,key = lambda e:e.__getitem__('rank'))
         answer = ""
         fenshu = 0
+        #获取正确答案
         for a in problemid:
             proid=a['ChoiceProblemId']
             chopro = ChoiceProblem.objects.filter(ChoiceProblemId=proid)
             for b in chopro:
                 answer += b.answer
+        #将学生答案与正确答案对比，并完成评分
         for i in range(0,len(answer)):
             if(stuanswer[i]==answer[i]):
                 fenshu = int(fenshu)+int(proScore)
         request.data['score']=fenshu
         savedata = StudentChoiceAnswerSerializer(data=request.data)
+        #将得分写入数据库
         if savedata.is_valid():
             savedata.save()
             return Response(HTTP_200_OK)
-        return Response('提交失败', HTTP_200_OK)
+        return Response('提交失败', HTTP_400_BAD_REQUEST)
 
 

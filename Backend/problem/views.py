@@ -93,14 +93,17 @@ class UploadFileAPIView(APIView):
 
 class DownloadFileAPIView(APIView):
     def get(self, request, format=None):
+        #身份验证
         type = request.session.get('type', 1)
         if type == 1:
             return Response("Admin Only", status=HTTP_403_FORBIDDEN)
         name = request.GET.get('name')
+        #打开一个文件流
         file = open('./ProblemData/'+name+'.zip','rb')
         response = FileResponse(file)
         response['Content-Type']='application/msword'
         response['Content-Disposition']='attachment;filename='+name+'.zip'
+        #将文件流返回给前端
         return response
 
 def showpic(request):

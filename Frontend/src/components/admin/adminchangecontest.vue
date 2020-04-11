@@ -225,7 +225,10 @@
                          :value="0"></el-option>
             </el-select>
           </el-form-item>
-
+          <el-form-item label="选择题分值（每道）">
+            <el-input v-model="changecontestform.ChoiceProblemScore"
+                      style="width:200px;"></el-input>
+          </el-form-item>
           <el-form-item label="默认参赛人员（如果是公开比赛，请忽略，私有比赛请务必填写，因为私有比赛不可注册，中间用英文逗号或换行隔开）：">
             <el-input type="textarea"
                       v-model="contestregister"
@@ -367,7 +370,8 @@ export default {
         begintime: new Date(),
         lasttime: 0,
         type: "",
-        auth: 0
+        auth: 0,
+        ChoiceProblemScore:0
       },
       toolbars: {
         bold: true, // 粗体
