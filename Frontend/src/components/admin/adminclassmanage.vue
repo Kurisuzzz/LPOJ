@@ -36,7 +36,9 @@
           　　　　　　<el-button type="primary"
                      size="small"
                      @click="CheckDetail(scope.row)">查看详情</el-button>
-          　　　　　　
+          　　　　　　<el-button type="primary"
+                     size="small"
+                     @click="CheckDetailScore(scope.row)">查看成绩详情</el-button>
           　　　　　　<el-button type="danger"
                      size="small"
                      @click="DeleteClass(scope.row)">删除</el-button>
@@ -184,6 +186,9 @@ export default {
     },
     CheckDetail (row) {
       window.open("/classdetail?className=" + row.className);
+    },
+    CheckDetailScore (row) {
+      window.open("/scoredetail?className=" + row.className);
     },
     DeleteClass (row) {
       this.$confirm(

@@ -83,13 +83,10 @@ export default {
     },
   },
   created () {
-    console.log(this.className);
     this.className = this.$route.query.className;
     this.$axios.get("/classStudent/?className=" + this.className)
       .then(
         response => {
-
-          console.log(response.data);
           this.classPeopleCount = response.data.length;
           this.TableData = response.data;
         }

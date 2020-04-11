@@ -104,7 +104,7 @@ export default {
                  if (response.data[0]) {
                    this.$message.error("你已经提交过答案");
                  }
-                  else {                    8
+                  else {
                     this.form.answer = "";
                     for (var i = 0; i < this.ProblenCount; i++) {
                       if (this.allRadio[i]) {

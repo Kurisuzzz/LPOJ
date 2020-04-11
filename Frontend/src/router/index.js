@@ -28,20 +28,20 @@ import Router from 'vue-router'
 
 const homepage = r => require.ensure([], () => r(require("@/components/main")), 'main"');
 const problem = r => require.ensure([], () => r(require("@/components/mainpage/problem")), 'mainpage');
-const statue = r => require.ensure([], () => r(require("@/components/mainpage/statue")), 'mainpage'); 
-const user = r => require.ensure([], () => r(require("@/components/mainpage/user")), 'mainpage');     
+const statue = r => require.ensure([], () => r(require("@/components/mainpage/statue")), 'mainpage');
+const user = r => require.ensure([], () => r(require("@/components/mainpage/user")), 'mainpage');
 const setting = r => require.ensure([], () => r(require("@/components/mainpage/setting")), 'mainpage');
 const contest = r => require.ensure([], () => r(require("@/components/mainpage/contest")), 'mainpage');
 const contestdetail = r => require.ensure([], () => r(require("@/components/contest/contestdetail")), 'contest');
 const problemdetail = r => require.ensure([], () => r(require("@/components/problem/problemdetail")), 'problem');
-const rank = r => require.ensure([], () => r(require("@/components/mainpage/rank")), 'mainpage');     
-const admin = r => require.ensure([], () => r(require("@/components/mainpage/admin")), 'mainpage');   
+const rank = r => require.ensure([], () => r(require("@/components/mainpage/rank")), 'mainpage');
+const admin = r => require.ensure([], () => r(require("@/components/mainpage/admin")), 'mainpage');
 const billboard = r => require.ensure([], () => r(require("@/components/mainpage/billboard")), 'mainpage');
-const blog = r => require.ensure([], () => r(require("@/components/mainpage/blog")), 'mainpage');     
-const wiki = r => require.ensure([], () => r(require("@/components/mainpage/wiki")), 'mainpage');     
-const algorithm = r => require.ensure([], () => r(require("@/components/wiki/algorithm")), 'wiki');   
+const blog = r => require.ensure([], () => r(require("@/components/mainpage/blog")), 'mainpage');
+const wiki = r => require.ensure([], () => r(require("@/components/mainpage/wiki")), 'mainpage');
+const algorithm = r => require.ensure([], () => r(require("@/components/wiki/algorithm")), 'wiki');
 const mbcode = r => require.ensure([], () => r(require("@/components/wiki/code")), 'wiki');
-const trainning = r => require.ensure([], () => r(require("@/components/wiki/trainning")), 'wiki');   
+const trainning = r => require.ensure([], () => r(require("@/components/wiki/trainning")), 'wiki');
 const viewcode = r => require.ensure([], () => r(require("@/components/wiki/mbcode/viewcode")), 'wiki');
 const viewcodedetail = r => require.ensure([], () => r(require("@/components/wiki/mbcode/viewcodedetail")), 'wiki');
 const codeedit = r => require.ensure([], () => r(require("@/components/wiki/mbcode/codeedit")), 'wiki');
@@ -53,7 +53,8 @@ const homework = r => require.ensure([], () => r(require("@/components/mainpage/
 const givechoiceproblemscore = r => require.ensure([], () => r(require("@/components/admin/givechoiceproblemscore")), 'admin');
 const classes = r => require.ensure([], () => r(require("@/components/mainpage/classes")), 'mainpage');
 const classdetail = r => require.ensure([], () => r(require("@/components/mainpage/classdetail")), 'mainpage');
-
+const scoredetail = r => require.ensure([], () => r(require("@/components/mainpage/scoredetail")), 'mainpage');
+const classscoredetail = r => require.ensure([], () => r(require("@/components/mainpage/classscoredetail")), 'mainpage');
 
 Vue.use(Router)
 
@@ -129,6 +130,16 @@ export default new Router({
       path: '/classdetail',
       name: 'classdetail',
       component: classdetail,
+    },
+    {
+      path: '/scoredetail',
+      name: 'scoredetail',
+      component: scoredetail,
+    },
+    {
+      path: '/classscoredetail',
+      name: 'classscoredetail',
+      component: classscoredetail,
     },
     {
       path: '/classes',
