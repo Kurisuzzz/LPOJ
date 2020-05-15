@@ -5,9 +5,6 @@
 [![travis-ci](https://travis-ci.org/Linzecong/LPOJ.svg?branch=master)](https://travis-ci.org/Linzecong/LPOJ)
 [![Join-QQ-Group](https://img.shields.io/badge/Join_QQ_Group-875136693-blue.svg?style=flat-round)](https://shang.qq.com/wpa/qunwpa?idkey=dcc9d5c63a744d5c09eda5dd7f4b208451e66b42ba633ea23ec6fa4d49135825)
 
-> 一个基于Vue.js和Django的轻量级在线评测系统
->
-> 目前应用于广东外语外贸大学
 ## 演示地址：[oj.lpoj.cn](https://oj.lpoj.cn)
 ## 说明文档：[docs.lpoj.cn](https://docs.lpoj.cn)
 
@@ -26,12 +23,12 @@
 + 丰富的算法知识和体系化的套题训练
 
 ## 模块列表
-+ [前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/Frontend)
-+ [手机前端 Vue.js](https://github.com/Linzecong/LPOJ/tree/master/FrontendMobile)
-+ [后端 Djangorestframework](https://github.com/Linzecong/LPOJ/tree/master/Backend)
-+ [判题服务器 Python](https://github.com/Linzecong/LPOJ/tree/master/JudgerServer)
-+ [判题程序 Python](https://github.com/Linzecong/LPOJ/tree/master/Judger)
-+ [爬虫程序 Python](https://github.com/Linzecong/LPOJ/tree/master/CrawlingServer)
++ [前端 Vue.js](https://github.com/Kurisuzzz/LPOJ/tree/master/Frontend)
++ [手机前端 Vue.js](https://github.com/Kurisuzzz/LPOJ/tree/master/FrontendMobile)
++ [后端 Djangorestframework](https://github.com/Kurisuzzz/LPOJ/tree/master/Backend)
++ [判题服务器 Python](https://github.com/Kurisuzzz/LPOJ/tree/master/JudgerServer)
++ [判题程序 Python](https://github.com/Kurisuzzz/LPOJ/tree/master/Judger)
++ [爬虫程序 Python](https://github.com/Kurisuzzz/LPOJ/tree/master/CrawlingServer)
 
 
 ## 使用Docker部署
@@ -50,7 +47,7 @@ sftp yourusername@localhost # 验证是否安装成功！
 ### 2. 开始安装
 
 ```
-git clone https://github.com/Linzecong/LPOJ.git && cd LPOJ
+git clone https://github.com/Kurisuzzz/LPOJ.git && cd LPOJ
 ```
 
 **请修改docker-compose.yml中的数据库密码（所有的 DB_PASSWORD，MYSQL_ROOT_PASSWORD 字段**
@@ -122,10 +119,6 @@ sudo docker-compose -f docker-compose-build.yml up -d --build --scale judger=3
 
 3.4 更新班级管理和布置作业功能，可以在比赛中添加选择题
 
-## 代办功能
-
-1. 封榜功能
-2. 更优秀的排行榜显示（现在人数多了会卡）
 
 ## 部分截图
 
@@ -141,7 +134,6 @@ sudo docker-compose -f docker-compose-build.yml up -d --build --scale judger=3
 
 ![image6](https://www.lpoj.cn/githubimage/image6.png)
 
-或者你可以直接访问我们  [oj.lpoj.cn](https://oj.lpoj.cn)
 
 ## 浏览器支持
 
@@ -149,12 +141,9 @@ Modern browsers(chrome, firefox)
 
 ## 特别感谢
 
-+ 广东外语外贸大学ACM集训队所有成员
-+ 广东外语外贸大学集训队所有老师
++ [广东外语外贸大学Linzecong](https://github.com/Linzecong/LPOJ)
 + [青岛大学在线评测系统](https://github.com/QingdaoU/OnlineJudge)
 + [24OI/OI-wiki](https://github.com/24OI/OI-wiki)
-
-
 
 ## 许可
 
